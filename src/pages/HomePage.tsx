@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// key to use in localStorage
+const USER_NAME_STORAGE_KEY = 'userName';
+
 export default function Home() {
 
     const [userName, setUserName] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        navigate('/clients-list');
+      // Verification if userName is not empty
+      if(userName.trim()){
+        // Save userName in localStorage
+        localStorage.setItem(USER_NAME_STORAGE_KEY, userName.trim());
+        navigate('/clients-list');} else {
+          alert('Por favor, digite o seu nome para continuar.');
+        }
     }
 
  return (

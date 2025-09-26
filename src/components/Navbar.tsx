@@ -1,7 +1,21 @@
+import { useEffect, useState } from 'react';
 import logo from '../assets/Logo.png'
 import { Link } from 'react-router-dom'
 
+// key that we use in localStorage
+const USER_NAME_STORAGE_KEY = 'userName';
+
 export default function Navbar() {
+    // Retrieve userName from localStorage
+    const [displayedUserName, setDisplayedUserName] = useState('Usuário');
+    // Effect to read localStorage
+    useEffect(() => {
+        const storedUserName = localStorage.getItem(USER_NAME_STORAGE_KEY);
+        // if have any name save, update the state
+        if (storedUserName) {
+            setDisplayedUserName(storedUserName);
+        }
+    }, []);
     return (
         <div className="flex items-center justify-between navbar px-4 h-[90px] bg-gray-50 text-white">
             {/* Left Container: Logo and Button Menu */}
@@ -28,7 +42,7 @@ export default function Navbar() {
             </nav>
             {/* Right Container: User Greeting */}
             <div className='text-md cursor-pointer text-black'>
-                Olá, <strong>Usuário!</strong>
+                Olá, <strong>{displayedUserName}!</strong>
             </div>
         </div>
     );
