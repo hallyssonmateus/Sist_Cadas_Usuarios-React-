@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import Navbar from './components/Navbar'
 // import Sidebar from './components/Sidebar'
 import './index.css'
-import Home from './pages/Home'
-import ClientsList from './pages/ClientsList'
-import ClientsSelected from './pages/ClientsSelected'
+import Home from './pages/HomePage'
+import ClientsList from './pages/ClientsListPage'
+import ClientsSelected from './pages/ClientsSelectedPage'
 
 function App() {
 
