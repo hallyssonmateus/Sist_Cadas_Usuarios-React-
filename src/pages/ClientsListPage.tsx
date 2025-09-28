@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 
 
 export default function ClientsList() {
+
  return (
    <div className="bg-stone-200">
     <Navbar />
@@ -31,9 +32,11 @@ export default function ClientsList() {
             <CardClients />
             <CardClients />
         </div>
-        <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm ">
+        <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm">
             Criar cliente
         </button>
+        {/* Modal */}
+        
     </section>
    </div>
  );

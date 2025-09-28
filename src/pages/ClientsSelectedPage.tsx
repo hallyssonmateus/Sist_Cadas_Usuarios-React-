@@ -1,4 +1,4 @@
-import CardClients from "../components/CardClients";
+import CardSelectClients from "../components/CardSelectClients";
 import Navbar from "../components/Navbar";
 
 export default function ClientsSelected() {
@@ -10,14 +10,14 @@ export default function ClientsSelected() {
       <h1 className="font-bold">Clientes Selecionados:</h1>
       {/* Selected Clients List Cards*/}
       <div className="w-full flex flex-wrap gap-4 mt-2">
-        <CardClients />
-        <CardClients />
-        <CardClients />
-        <CardClients />
-        <CardClients />
-        <CardClients />
-        <CardClients />
-        <CardClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
+        <CardSelectClients />
       </div>
       {/* Button Inferior */}
       <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm ">
