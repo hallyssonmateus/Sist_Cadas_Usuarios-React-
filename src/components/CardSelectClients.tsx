@@ -1,4 +1,4 @@
-import { FaMinus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa6";
 
 export default function CardSelectClients() {
  return (
