@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "../components/Modal";
 import { CreateClienteModal } from "../components/CreateClientModal";
 import { EditClientModal } from "../components/EditClientModal";
+import { DeleteClientModal } from "../components/DeleteClientModal";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -62,7 +63,7 @@ export default function ClientsList() {
             case 'Edit':
                 return <EditClientModal clientData={selectedClientData!} onClose={closeModal} />;
             case 'Delete':
-                return <div>Delete Modal for client ID: {selectedClientId}</div>;
+                return <DeleteClientModal clientData={selectedClientData!} onClose={closeModal} />;
             default:
                 return null;
         }
