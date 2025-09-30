@@ -1,12 +1,6 @@
 import React from 'react';
-
-// Client Interface 
-interface Client {
-    id: number;
-    name: string;
-    salary: number;
-    company: number;
-}
+// Import Interface Client from types
+import type { Client } from '../types/Client';
 
 // Props for DeleteClientModal
 interface DeleteClientModalProps {

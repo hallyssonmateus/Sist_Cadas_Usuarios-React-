@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
+// Import interface Client from Types
+import type { Client } from "../types/Client";
 
-// Client data type
-interface Client {
-    id: number;
-    name: string;
-    salary: number;
-    company: number;
-}
+
 interface EditClientModalProps {
     clientData: Client;
     onClose: () => void;
@@ -17,7 +13,7 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({ clientData, on
     const [formData, setFormData] = useState({
         name: clientData.name,
         salary: clientData.salary.toString(),
-        company: clientData.company.toString(),
+        company: clientData.companyValuation.toString(),
     });
 
     //Update state form when clientData prop changes
@@ -25,7 +21,7 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({ clientData, on
         setFormData({
             name: clientData.name,
             salary: clientData.salary.toString(),
-            company: clientData.company.toString(),
+            company: clientData.companyValuation.toString(),
         });
     }, [clientData]);
 

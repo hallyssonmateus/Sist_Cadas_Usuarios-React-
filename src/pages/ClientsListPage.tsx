@@ -6,36 +6,27 @@ import { CreateClienteModal } from "../components/CreateClientModal";
 import { EditClientModal } from "../components/EditClientModal";
 import { DeleteClientModal } from "../components/DeleteClientModal";
 import { Pagination } from "../components/Pagination";
+import type { Client } from "../types/Client";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
 
-interface Client {
-    id: number;
-    name: string;
-    salary: number;
-    company: number;
-}
 const mockClients: Client[] = [
-    { id: 1, name: "Eduardo", salary: 3500, company: 120000 },
-    { id: 2, name: "Ana", salary: 4200, company: 150000 },
-    { id: 3, name: "Carlos", salary: 2800, company: 90000 },
-    { id: 4, name: "Mariana", salary: 5000, company: 200000 },
-    { id: 5, name: "Lucas", salary: 3200, company: 110000 },
-    { id: 6, name: "Beatriz", salary: 4500, company: 160000 },
-    { id: 7, name: "Rafael", salary: 3900, company: 130000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
-    { id: 8, name: "Juliana", salary: 4800, company: 180000 },
+    { id: 1, name: "Eduardo", salary: 3500, companyValuation: 120000 },
+    { id: 2, name: "Ana", salary: 4200, companyValuation: 150000 },
+    { id: 3, name: "Carlos", salary: 2800, companyValuation: 90000 },
+    { id: 4, name: "Mariana", salary: 5000, companyValuation: 200000 },
+    { id: 5, name: "Lucas", salary: 3200, companyValuation: 110000 },
+    { id: 6, name: "Beatriz", salary: 4500, companyValuation: 160000 },
+    { id: 7, name: "Rafael", salary: 3900, companyValuation: 130000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    { id: 8, name: "Juliana", salary: 4800, companyValuation: 180000 },
+    
 ];
 
 export default function ClientsList() {
@@ -84,12 +75,12 @@ export default function ClientsList() {
     // States for Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(16);
-    const [totalPages, setTotalPage] = useState(12);
+    const [totalPages] = useState(12);
     const totalClients = 16;
 
     //Navigation function
     const goToPage = (page: number) => {
-        if (page > 0 && page <= totalPage){
+        if (page > 0 && page <= totalPages){
             setCurrentPage(page);
         }
     };
@@ -111,7 +102,9 @@ export default function ClientsList() {
                         
                         <div className="flex items-center space-x-2">                        
                             <h2>Clientes por página: </h2>
-                            <select className="border border-gray-300 rounded-sm focus: outline-none cursor-pointer">
+                            <select className="border border-gray-300 rounded-sm focus: outline-none cursor-pointer"
+                                    value={limit}
+                                    onChange={handleLimitChange}>
                                 <option value={8}>8</option>
                                 <option value={16}>16</option>
                                 <option value={32}>32</option>
@@ -120,16 +113,13 @@ export default function ClientsList() {
                     </div>
                     {/* Clients List Cards*/}
                     <div className="w-full flex flex-wrap gap-4 mt-2">
-                        {mockClients.map((client) => (
+                        {[...Array(limit)].map((_, index) => (
                             <CardClients 
-                                key={client.id}
-                                clientId={client.id}
-                                name={client.name}
-                                salary={client.salary}
-                                company={client.company}
-                                onEdit={openEditModal}
-                                onDelete={openDeleteModal}
-                            />    
+                            key={index} 
+                            clientId={index +1}
+                            onEdit={openEditModal}
+                            onDelete={openDeleteModal}
+                            />
                         ))}
                     </div>
                     <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
