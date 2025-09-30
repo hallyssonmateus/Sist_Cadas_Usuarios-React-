@@ -18,7 +18,7 @@
 <h2 id="layout">🎨 Layout</h2>
 
 <p align="center">
-    <img src="../Sist_Cadas_Usuarios-React-/src/assets/WelcomeScreen_Inspiration.PNG" alt="Image Example" width="400px">
+    <img src="src/assets/WelcomeScreen_Inspiration.PNG" alt="Image Example" width="400px">
 </p>
 
 <h2 id="technologies">💻 Technologies</h2>
