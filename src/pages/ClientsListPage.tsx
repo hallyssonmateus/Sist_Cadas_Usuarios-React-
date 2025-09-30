@@ -2,7 +2,8 @@ import CardClients from "../components/CardClients";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { Modal } from "../components/Modal";
-import { CreateClienteModal } from "../components/CreateClienteModal";
+import { CreateClienteModal } from "../components/CreateClientModal";
+import { EditClientModal } from "../components/EditClientModal";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -37,12 +38,13 @@ export default function ClientsList() {
     // Function to open modal specific
     const openCreateModal = () => setActiveModal('Create');
 
-    // Function to open Edit/Delete modal and set selected client ID
+    // Function to open Edit modal and set selected client ID
     const openEditModal = (id: number) => {
         setSelectedClientId(id);
         setActiveModal('Edit');
     }
-
+    const selectedClientData = mockClients.find(c => c.id === selectedClientId);
+    // Function to open Delete modal and set selected client ID
     const openDeleteModal = (id: number) => {
         setSelectedClientId(id);
         setActiveModal('Delete');
@@ -58,7 +60,7 @@ export default function ClientsList() {
             case 'Create':
                 return <CreateClienteModal onClose={closeModal} />;
             case 'Edit':
-                return <div>Edit Modal for client ID: {selectedClientId}</div>;
+                return <EditClientModal clientData={selectedClientData!} onClose={closeModal} />;
             case 'Delete':
                 return <div>Delete Modal for client ID: {selectedClientId}</div>;
             default:
@@ -76,28 +78,23 @@ export default function ClientsList() {
                     </div>
                     {/* Clients List Cards*/}
                     <div className="w-full flex flex-wrap gap-4 mt-2">
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
-                        <CardClients />
+                        {mockClients.map((client) => (
+                            <CardClients 
+                                key={client.id}
+                                clientId={client.id}
+                                name={client.name}
+                                salary={client.salary}
+                                company={client.company}
+                                onEdit={openEditModal}
+                                onDelete={openDeleteModal}
+                            />    
+                        ))}
                     </div>
                     <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
                         Criar cliente
                     </button>
                     {/* Modal */}
-                    <Modal isOpen={activeModal} onClose={closeModal}>
+                    <Modal isOpen={activeModal !== null} onClose={closeModal}>
                         {renderModalContent()}
                     </Modal>
                 </section>
