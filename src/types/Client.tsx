@@ -16,3 +16,9 @@ export interface UpdateClientDTO {
     salary: number;
     companyValuation: number;
 }
+
+export interface ClientListResponse {
+    clients: Client[];
+    totalPages: number;
+    currentPage: number;
+}

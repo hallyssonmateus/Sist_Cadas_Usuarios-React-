@@ -1,12 +1,14 @@
 import CardClients from "../components/CardClients";
 import Navbar from "../components/Navbar";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback} from "react";
 import { Modal } from "../components/Modal";
 import { CreateClienteModal } from "../components/CreateClientModal";
 import { EditClientModal } from "../components/EditClientModal";
 import { DeleteClientModal } from "../components/DeleteClientModal";
 import { Pagination } from "../components/Pagination";
 import type { Client } from "../types/Client";
+import { getClients } from "../api/clientService";
+import axios from "axios";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -34,6 +36,12 @@ export default function ClientsList() {
     const [activeModal, setActiveModal] = useState<Modaltype>(null);
     // State to keep Id of client being edited or deleted
     const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
+    // Clients list from API
+    const [clients, setClients] = useState<Client[]>([]);
+    // Charge state
+    const [isLoading, setIsLoading] = useState(true);
+    // Total items - API meta
+    const [totalItems, setTotalItems] = useState(0);
     // Function to control modal
     const closeModal = () => {
         setActiveModal(null);
@@ -75,8 +83,7 @@ export default function ClientsList() {
     // States for Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(16);
-    const [totalPages] = useState(12);
-    const totalClients = 16;
+    const [totalPages, setTotalPages] = useState(12);
 
     //Navigation function
     const goToPage = (page: number) => {
@@ -89,6 +96,47 @@ export default function ClientsList() {
         setLimit(Number(e.target.value));
         setCurrentPage(1);
     }
+
+    // Response Api - Get Clients
+    const fetchClients = useCallback(async (page: number, limit: number) => {
+        setIsLoading(true);
+        try {
+            // Real call to API
+            const responseData  = await getClients(page, limit);
+            // Update of Data e Pagination
+            //Update the list Clients to atual page
+            setClients(responseData.clients);
+
+            //setTotalPages(responseData.totalPages)
+            // Se a API retornar 0 páginas, definimos um valor fixo ALTO (ex: 5)
+            const simulatedTotalPages = responseData.totalPages > 0 
+                ? responseData.totalPages 
+                : 5; // Valor Fixo para forçar os botões a aparecerem
+
+            setTotalPages(simulatedTotalPages);
+            // --- FIM DO TESTE DE FORÇA DE PAGINAÇÃO ---
+
+            console.log("Dados da API recebidos com metadados:", responseData);
+
+            setTotalItems(responseData.clients.length);
+        } catch (error){
+            if(axios.isAxiosError(error) && error.response){
+                console.error("Erro Axios ao buscar clientes:", error.response);
+            } else {
+                console.error("Erro de Rede ou Formato Inesperado:", error);
+            }
+            setClients([]);
+            setTotalItems(0);
+            setTotalPages(0);
+        } finally {
+            setIsLoading(false);
+        }
+    },[setClients, setTotalItems, setTotalPages, setIsLoading]);
+    // Effect to research the data when page ou limit change
+    useEffect(() => {
+        fetchClients(currentPage, limit);
+    }, [currentPage, limit, fetchClients]);
+    
         return (
             <div className="bg-stone-200">
                 <Navbar />
@@ -96,7 +144,7 @@ export default function ClientsList() {
                     {/* Header content */}
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                            <strong>{totalClients}</strong>                            
+                            <strong>{totalItems}</strong>                            
                             <h2 className="">clientes encontrados:</h2>
                         </div>
                         
@@ -113,14 +161,19 @@ export default function ClientsList() {
                     </div>
                     {/* Clients List Cards*/}
                     <div className="w-full flex flex-wrap gap-4 mt-2">
-                        {[...Array(limit)].map((_, index) => (
-                            <CardClients 
-                            key={index} 
-                            clientId={index +1}
-                            onEdit={openEditModal}
-                            onDelete={openDeleteModal}
-                            />
-                        ))}
+                        {isLoading ? (
+                            // Render the Loading while API reponse
+                            <p className="w-full text-center text-gray-500 py-10"> Carregando clients...</p>
+                        ) : (
+                            //Mapping the Real clients from API
+                            clients.map((client) => (
+                                <CardClients 
+                                    key={client.id}
+                                    clientId={client.id}
+                                    onEdit={openEditModal}
+                                    onDelete={openDeleteModal}/>
+                            ))
+                        )}
                     </div>
                     <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
                         Criar cliente
