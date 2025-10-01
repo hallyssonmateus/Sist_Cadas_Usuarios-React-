@@ -9,6 +9,7 @@ import { Pagination } from "../components/Pagination";
 import type { Client } from "../types/Client";
 import { getClients } from "../api/clientService";
 import axios from "axios";
+import Sidebar from "../components/Sidebar";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -32,6 +33,13 @@ const mockClients: Client[] = [
 ];
 
 export default function ClientsList() {
+    // SideBar State
+    const [isSidebarOpen, setisSidebarOpen] = useState(false);
+    //Function to toggle
+    const toggleSidebar = () => {
+        setisSidebarOpen(prev => !prev);
+    }
+    const sidebarWidth = '260px';
     // Modal type state management
     const [activeModal, setActiveModal] = useState<Modaltype>(null);
     // State to keep Id of client being edited or deleted
@@ -138,57 +146,68 @@ export default function ClientsList() {
     }, [currentPage, limit, fetchClients]);
     
         return (
-            <div className="bg-stone-200">
-                <Navbar />
-                <section className="p-10 flex flex-col max-w-6xl mx-auto">
-                    {/* Header content */}
-                    <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                            <strong>{totalItems}</strong>                            
-                            <h2 className="">clientes encontrados:</h2>
+            <div className="bg-stone-200 flex min-h-screen">
+                {/* Layout Section: Altern between Sidebar and Navbar */}
+                {isSidebarOpen && (
+                    <Sidebar onClose={toggleSidebar}/>
+                )}
+                {/* Main Content - Client List */}
+                <div className="flex-1 transition-all duration-300"
+                    style={{marginLeft: isSidebarOpen ? sidebarWidth: '0',
+                        width: isSidebarOpen ? `calc(100% - ${sidebarWidth})` : '100%'
+                    }}>
+                    
+                    {!isSidebarOpen && <Navbar onToggleSidebar={toggleSidebar}/>}
+                    <section className="p-10 flex flex-col">
+                        {/* Header content */}
+                        <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <strong>{totalItems}</strong>                            
+                                <h2 className="">clientes encontrados:</h2>
+                            </div>
+                            
+                            <div className="flex items-center space-x-2">                        
+                                <h2>Clientes por página: </h2>
+                                <select className="border border-gray-300 rounded-sm focus: outline-none cursor-pointer"
+                                        value={limit}
+                                        onChange={handleLimitChange}>
+                                    <option value={8}>8</option>
+                                    <option value={16}>16</option>
+                                    <option value={32}>32</option>
+                                </select>
+                            </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-2">                        
-                            <h2>Clientes por página: </h2>
-                            <select className="border border-gray-300 rounded-sm focus: outline-none cursor-pointer"
-                                    value={limit}
-                                    onChange={handleLimitChange}>
-                                <option value={8}>8</option>
-                                <option value={16}>16</option>
-                                <option value={32}>32</option>
-                            </select>
+                        {/* Clients List Cards*/}
+                        <div className="w-full flex flex-wrap gap-4 mt-2">
+                            {isLoading ? (
+                                // Render the Loading while API reponse
+                                <p className="w-full text-center text-gray-500 py-10"> Carregando clients...</p>
+                            ) : (
+                                //Mapping the Real clients from API
+                                clients.map((client) => (
+                                    <CardClients 
+                                        key={client.id}
+                                        clientId={client.id}
+                                        onEdit={openEditModal}
+                                        onDelete={openDeleteModal}/>
+                                ))
+                            )}
                         </div>
-                    </div>
-                    {/* Clients List Cards*/}
-                    <div className="w-full flex flex-wrap gap-4 mt-2">
-                        {isLoading ? (
-                            // Render the Loading while API reponse
-                            <p className="w-full text-center text-gray-500 py-10"> Carregando clients...</p>
-                        ) : (
-                            //Mapping the Real clients from API
-                            clients.map((client) => (
-                                <CardClients 
-                                    key={client.id}
-                                    clientId={client.id}
-                                    onEdit={openEditModal}
-                                    onDelete={openDeleteModal}/>
-                            ))
-                        )}
-                    </div>
-                    <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
-                        Criar cliente
-                    </button>
-                    {/* Pagination */}
-                    <Pagination 
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={goToPage}
-                    />
-                    {/* Modal */}
-                    <Modal isOpen={activeModal !== null} onClose={closeModal}>
-                        {renderModalContent()}
-                    </Modal>
-                </section>
+                        <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
+                            Criar cliente
+                        </button>
+                        {/* Pagination */}
+                        <Pagination 
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                        />
+                        {/* Modal */}
+                        <Modal isOpen={activeModal !== null} onClose={closeModal}>
+                            {renderModalContent()}
+                        </Modal>
+                    </section>
+                </div>
             </div>
         );
     }

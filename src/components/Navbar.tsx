@@ -5,7 +5,12 @@ import { Link } from 'react-router-dom'
 // key that we use in localStorage
 const USER_NAME_STORAGE_KEY = 'userName';
 
-export default function Navbar() {
+// Interface prop
+interface NavbarProps {
+    onToggleSidebar: () => void;
+}
+
+export default function Navbar({onToggleSidebar}: NavbarProps) {
     // Retrieve userName from localStorage
     const [displayedUserName, setDisplayedUserName] = useState('Usuário');
     // Effect to read localStorage
@@ -20,7 +25,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between navbar px-4 h-[90px] bg-gray-50 text-white">
             {/* Left Container: Logo and Button Menu */}
             <div className='flex items-center px-4 py-2 gap-6'>
-                <button className='text-2xl text-black hover:text-orange-500'>
+                <button className='text-2xl text-black hover:text-orange-500 cursor-pointer'
+                        onClick={onToggleSidebar}>
                     ☰
                 </button>
                 <img src={logo} alt="Logo" className='w-28' />

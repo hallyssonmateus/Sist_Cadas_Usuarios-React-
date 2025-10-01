@@ -1,11 +1,27 @@
 import CardSelectClients from "../components/CardSelectClients";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
 
 export default function ClientsSelected() {
+  // SideBar State
+      const [isSidebarOpen, setisSidebarOpen] = useState(false);
+      //Function to toggle
+      const toggleSidebar = () => {
+          setisSidebarOpen(prev => !prev);
+      }
+      const sidebarWidth = '260px';
  return (
-   <div className="bg-stone-200 h-screen">
-    <Navbar />
-    <section className="p-10 flex flex-col max-w-6xl mx-auto">
+   <div className="bg-stone-200 min-h-screen flex">
+    {isSidebarOpen && (<Sidebar onClose={toggleSidebar}/>)}
+    <div className="flex-1 transition-all duration-300"
+        style={{
+          marginLeft: isSidebarOpen ? sidebarWidth : '0',
+          width: isSidebarOpen ? `calc(100% - ${sidebarWidth})` : '100%' 
+        }}
+        >
+          {!isSidebarOpen && <Navbar onToggleSidebar={toggleSidebar}/>}
+      <section className="p-10 flex flex-col max-w-6xl mx-auto">
       {/* Header content */}
       <h1 className="font-bold">Clientes Selecionados:</h1>
       {/* Selected Clients List Cards*/}
@@ -24,6 +40,7 @@ export default function ClientsSelected() {
         Limpar clientes selecionados
       </button>
     </section>
+    </div>    
    </div>
  );
 }
