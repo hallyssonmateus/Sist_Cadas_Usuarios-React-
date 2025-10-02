@@ -10,16 +10,21 @@ interface CardClientsProps {
     company?: number;
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
+    onAddClient: () => void;
+    isSelected: boolean;
 }
 
-export default function CardClients({ clientId, name,salary,company, onEdit, onDelete }: CardClientsProps) {
+export default function CardClients({ clientId, name,salary,company, onEdit, onDelete, onAddClient, isSelected = false}: CardClientsProps) {
  return (
     <div className="card bg-white w-[245px] h-[138px] p-2 rounded-xs shadow-sm flex flex-col justify- items-center gap-1">
         <h2 className="font-bold">Cliente ID:{name}</h2>
         <p>Salário: R${salary}</p>
         <p>Empresa: R${company}</p>
         <div className="flex justify-between p-2 w-full">
-            <button className="text-lg cursor-pointer">
+            <button className={`text-lg cursor-pointer ${isSelected ? 'text-green-500' : 'text-black-500'}`} 
+                    onClick={onAddClient}
+                    disabled={isSelected}
+                    title={isSelected ? "Cliente já selecionado" : "Adicionar cliente"}>
                 <FaPlus />
             </button>
             <button className="text-lg cursor-pointer" onClick={() => onEdit(clientId)}>

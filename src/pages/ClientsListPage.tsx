@@ -14,6 +14,11 @@ import Sidebar from "../components/Sidebar";
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
 
+interface ClientsListProps {
+    onAddClient: (client: Client) => void;
+    selectedClients: Client[];
+}
+
 const mockClients: Client[] = [
     { id: 1, name: "Eduardo", salary: 3500, companyValuation: 120000 },
     { id: 2, name: "Eduardo", salary: 3500, companyValuation: 120000 },
@@ -39,7 +44,7 @@ const mockClients: Client[] = [
 
 ];
 
-export default function ClientsList() {
+export default function ClientsList({onAddClient, selectedClients}: ClientsListProps) {
     // SideBar State
     const [isSidebarOpen, setisSidebarOpen] = useState(false);
     //Function to toggle
@@ -176,6 +181,17 @@ export default function ClientsList() {
         fetchClients(currentPage, limit);
     }, [currentPage, limit, fetchClients]);
 
+    const getClientByID = (id: number) => { 
+    return clients.find(c => c.id === id);
+}
+
+    const handleAddClient = (clientId: number) => {
+        const clientToAdd = getClientByID(clientId);
+        if (clientToAdd){
+            onAddClient(clientToAdd);
+        }
+    };
+
     return (
         <div className="bg-stone-200 flex min-h-screen">
             {/* Layout Section: Altern between Sidebar and Navbar */}
@@ -216,7 +232,10 @@ export default function ClientsList() {
                             <p className="w-full text-center text-gray-500 py-10"> Carregando clients...</p>
                         ) : (
                             //Mapping the Real clients from API
-                            clients.map((client) => (
+                            clients.map((client) => {
+                                const isSelected = selectedClients.some(c => c.id === client.id);
+
+                                return (
                                 <CardClients
                                     key={client.id}
                                     clientId={client.id}
@@ -224,8 +243,13 @@ export default function ClientsList() {
                                     salary={client.salary}
                                     company={client.companyValuation}
                                     onEdit={openEditModal}
-                                    onDelete={openDeleteModal} />
-                            ))
+                                    onDelete={openDeleteModal} 
+                                    onAddClient={() => handleAddClient(client.id)}
+                                    isSelected={isSelected}
+                                    />
+                                );
+                            }
+                            )
                         )}
                     </div>
                     <button className="mt-4 p-2 text-sm font-bold cursor-pointer text-orange-600 text-bold w-full border-2 border border-orange-500 rounded-sm" onClick={openCreateModal}>
