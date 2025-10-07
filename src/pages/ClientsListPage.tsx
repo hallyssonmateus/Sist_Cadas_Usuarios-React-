@@ -10,6 +10,7 @@ import type { Client } from "../types/Client";
 import { getClients } from "../api/clientService";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
+import { createClient } from "../api/clientService";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -90,7 +91,7 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
         }
         switch (activeModal) {
             case 'Create':
-                return <CreateClienteModal onClose={closeModal} />;
+                return <CreateClienteModal onClose={closeModal} onCreate={handleCreateClient}/>;
             case 'Edit':
                 return <EditClientModal clientData={selectedClientData!} onClose={closeModal} />;
             case 'Delete':
@@ -176,6 +177,22 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
             setIsLoading(false);
         }
     }, [setClients, setTotalItems, setTotalPages, setIsLoading]);
+
+    // Response API - Post clients
+    const handleCreateClient = async (clientData: Omit<Client, 'id'>) => {
+        setIsLoading(true);
+        try {
+            await createClient(clientData);
+            console.log("Client criado com sucesso!");
+            fetchClients(currentPage, limit);
+        } catch (error) {
+
+            console.error("Falha ao criar cliente:", error);
+        } finally {
+            setIsLoading(false);
+            closeModal();
+        }
+    }
     // Effect to research the data when page ou limit change
     useEffect(() => {
         fetchClients(currentPage, limit);
