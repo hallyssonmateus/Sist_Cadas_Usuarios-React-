@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import logo from '../assets/Logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 // key that we use in localStorage
 const USER_NAME_STORAGE_KEY = 'userName';
@@ -11,6 +11,10 @@ interface NavbarProps {
 }
 
 export default function Navbar({onToggleSidebar}: NavbarProps) {
+    //Get the current URL
+    const location = useLocation();
+    //Function to help verify if route is active
+    const isLinkActive = (path: string) => location.pathname === path;
     // Retrieve userName from localStorage
     const [displayedUserName, setDisplayedUserName] = useState('Usuário');
     // Effect to read localStorage
@@ -36,10 +40,14 @@ export default function Navbar({onToggleSidebar}: NavbarProps) {
                 <ul className='flex gap-6 text-md text-black font-semibold'>
                     {/* Using the Link component from react-router-dom for navigation */}
                     <li>
-                        <Link to="/clients-list" className='hover:text-orange-500 cursor-pointer'>Clientes</Link>
+                        <Link to="/clients-list" className={`cursor-pointer 
+                            ${isLinkActive('/clients-list') ? 'text-orange-400 border-b-2 hover:text-orange-400' : 'hover:text-orange-400'}
+                            `}>Clientes</Link>
                     </li>
                     <li>
-                        <Link to="/clients-selected" className='hover:text-orange-500 cursor-pointer'>Clientes Selecionados</Link>
+                        <Link to="/clients-selected" className={`cursor-pointer
+                            ${isLinkActive('/clients-selected') ? 'border-b-2 hover: text-orange-400' : 'hover:text-orange-400'}
+                            `}>Clientes Selecionados</Link>
                     </li>
                     <li>
                         <Link to="/" className='hover:text-orange-500 cursor-pointer'>Sair</Link>
