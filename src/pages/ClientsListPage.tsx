@@ -269,7 +269,7 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
                 {!isSidebarOpen && <Navbar onToggleSidebar={toggleSidebar} />}
                 <section className="p-10 flex flex-col max-w-6xl mx-auto">
                     {/* Header content */}
-                    <div className="flex justify-between items-center">
+                    <div className="md:flex justify-between items-center sm:flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <strong>{totalItems}</strong>
                             <h2 className="">clientes encontrados:</h2>
