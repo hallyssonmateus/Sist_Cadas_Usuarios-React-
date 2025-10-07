@@ -1,6 +1,7 @@
 import Logo from '../assets/Logo.png'
 import { MdArrowCircleLeft } from "react-icons/md";
 import { RiHome4Fill, RiUserFill, RiUserFollowFill } from 'react-icons/ri'
+import { Link } from 'react-router-dom';
 
 interface SideBarProps {
   // Function to close sidebar
@@ -30,17 +31,23 @@ export default function Sidebar({onClose}: SideBarProps) {
         {/* Inferior Sidebar */}
         <div className='h-full px-4 py-6'>
           <ul className='flex flex-col gap-8 px-4'>
-            <li className='flex items-center gap-4 cursor-pointer'>
+            <li>
+              <Link to="/" className='flex items-center gap-4 cursor-pointer'>
               <RiHome4Fill />
               Home
+              </Link>
             </li>
-            <li className='flex items-center gap-4 cursor-pointer'>
+            <li>
+              <Link to="/clients-list" className='flex items-center gap-4 cursor-pointer'>
               <RiUserFill />
               Clientes
+              </Link>
             </li>
-            <li className='flex items-center gap-4 cursor-pointer'>
+            <li>
+              <Link to="/clients-selected" className='flex items-center gap-4 cursor-pointer'>
               <RiUserFollowFill />
               Clientes selecionados
+              </Link>
             </li>
           </ul>
         </div>
