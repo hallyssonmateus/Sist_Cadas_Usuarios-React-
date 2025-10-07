@@ -6,12 +6,15 @@ import type { Client } from '../types/Client';
 interface DeleteClientModalProps {
     clientData: Client;
     onClose: () => void;
+    onDelete: (id: number) => void;
 }
 
-export const DeleteClientModal: React.FC<DeleteClientModalProps> = ({clientData, onClose}) => {
+export const DeleteClientModal: React.FC<DeleteClientModalProps> = ({clientData, onClose, onDelete}) => {
     // Handle deletion logic
     const handleDelete = () => {
         console.log(`Client with ID ${clientData.id} deleted.`);
+        //Call the delete function, passing the client ID
+        onDelete(clientData.id);
         onClose();
     };
 

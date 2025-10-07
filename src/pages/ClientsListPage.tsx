@@ -12,6 +12,7 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { createClient } from "../api/clientService";
 import { UpdateClient } from "../api/clientService";
+import { deleteClient } from "../api/clientService";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
@@ -93,17 +94,22 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
             return null; // No client selected, don't render anything
         }
 
-        const selectedClientData = clients.find(c => c.id === selectedClientId);
-
-        if (!selectedClientData) return null;
-
         switch (activeModal) {
             case 'Create':
                 return <CreateClienteModal onClose={closeModal} onCreate={handleCreateClient}/>;
             case 'Edit':
-                return <EditClientModal clientData={selectedClientData} onClose={closeModal} onUpdate={handleUpdateClient}/>;
             case 'Delete':
-                return <DeleteClientModal clientData={selectedClientData!} onClose={closeModal} />;
+                {// Reseach logic
+                const selectedClientData = clients.find(c => c.id === selectedClientId);
+
+                if (!selectedClientData) return null; // Proteção localizada
+
+                if (activeModal === 'Edit') {
+                    return <EditClientModal clientData={selectedClientData} onClose={closeModal} onUpdate={handleUpdateClient}/>;
+                } else { // activeModal === 'Delete'
+                    return <DeleteClientModal clientData={selectedClientData} onClose={closeModal} onDelete={handleDeleteClient}/>;
+                }
+            }
             default:
                 return null;
         }
@@ -214,6 +220,21 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
             fetchClients(currentPage, limit);
         } catch (error) {
             console.error(`falha ao editar o cliente ${id}:`, error);
+        } finally {
+            setIsLoading(false);
+            closeModal();
+        }
+    }
+    // Response API - Delete clients
+    const handleDeleteClient = async (id: number) => {
+        setIsLoading(true);
+        try{
+            await deleteClient(id);
+
+            console.log(`Cliente ${id} excluido com sucesso!`);
+            fetchClients(currentPage, limit);
+        } catch (error){
+            console.error(`Falha ao excluir cliente ${id}:`, error);
         } finally {
             setIsLoading(false);
             closeModal();

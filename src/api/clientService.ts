@@ -51,3 +51,17 @@ export async function UpdateClient(id: number, clientData: UpdateClientData): Pr
         throw new Error("Erro de rede ou formato inesperado ao editar cliente.")
     }
 }
+
+//Requisition Delete into api
+export async function deleteClient(id: number): Promise<void> {
+    try {
+        await axios.delete(
+            `${API_BASE_URL}/users/${id}`
+        );
+    } catch (error) {
+        if(axios.isAxiosError(error) && error.response){
+            console.error(`Erro ao excluir cliente ${id}:`, error.response.data);
+            throw new Error(error.response.data.message || "Falha na exclusão do cliente.")
+        } throw new Error("Erro de rede ou formato inesperado ao excluir o cliente.");
+    }
+}
