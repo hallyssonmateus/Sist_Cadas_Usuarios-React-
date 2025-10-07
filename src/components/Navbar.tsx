@@ -29,10 +29,10 @@ export default function Navbar({onToggleSidebar}: NavbarProps) {
                         onClick={onToggleSidebar}>
                     ☰
                 </button>
-                <img src={logo} alt="Logo" className='w-28' />
+                <img src={logo} alt="Logo" className='w-28 hidden md:block' />
             </div>
             {/* Center Container: Navigation Links */}
-            <nav>
+            <nav className='hidden md:block'>
                 <ul className='flex gap-6 text-md text-black font-semibold'>
                     {/* Using the Link component from react-router-dom for navigation */}
                     <li>

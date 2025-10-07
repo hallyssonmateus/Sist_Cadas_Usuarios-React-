@@ -9,7 +9,7 @@ interface SideBarProps {
 
 export default function Sidebar({onClose}: SideBarProps) {
   return (
-    <aside className="h-screen w-[260px] bg-gray-100 fixed top-0 left-0 z-50">
+    <aside className="h-screen w-[260px] bg-gray-100">
       {/* Superior Sidebar */}
       <nav className="h-full flex flex-col relative">
         <header className="w-full h-[128px] bg-zinc-700 flex items-center justify-center rounded-tr-lg">
