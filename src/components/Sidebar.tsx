@@ -9,12 +9,17 @@ interface SideBarProps {
 
 export default function Sidebar({onClose}: SideBarProps) {
   return (
-    <aside className="h-screen w-[260px] bg-gray-100">
+    <aside className="h-screen w-[260px] bg-gray-100 fixed top-0 left-0 z-50">
       {/* Superior Sidebar */}
       <nav className="h-full flex flex-col relative">
         <header className="w-full h-[128px] bg-zinc-700 flex items-center justify-center rounded-tr-lg">
           <img src={Logo} className='w-32' />
-          <div className='h-[42px] w-[42px] bg-zinc-950 border absolute top-[90px] left-[240px] rounded-[50%] flex items-center justify-center cursor-pointer'>
+          <div className='h-[42px] w-[42px] bg-zinc-950 border absolute
+          top-[85px] left-[170px] 
+          sm:top-[85px] sm:left-[240px]
+          md:top-[85px] md:left-[240px]
+          lg:top-[90px] lg:left-[240px]
+          rounded-[50%] flex items-center justify-center cursor-pointer'>
             <button className='text-white h-[16px] w-[16px] cursor-pointer'
                     onClick={onClose}>
               <MdArrowCircleLeft />

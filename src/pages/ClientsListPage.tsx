@@ -263,12 +263,9 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
                 <Sidebar onClose={toggleSidebar} />
             )}
             {/* Main Content - Client List */}
-            <div className="flex-1 transition-all duration-300"
-                style={{
-                    marginLeft: isSidebarOpen ? sidebarWidth : '0',
-                    width: isSidebarOpen ? `calc(100% - ${sidebarWidth})` : '100%'
-                }}>
-
+            <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? `pl-[${sidebarWidth}]` : 'pl-0'}`}
+            >
+                
                 {!isSidebarOpen && <Navbar onToggleSidebar={toggleSidebar} />}
                 <section className="p-10 flex flex-col max-w-6xl mx-auto">
                     {/* Header content */}
