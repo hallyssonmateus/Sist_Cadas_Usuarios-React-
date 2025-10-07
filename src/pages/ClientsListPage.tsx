@@ -272,7 +272,7 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
                     <div className="md:flex justify-between items-center sm:flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <strong>{totalItems}</strong>
-                            <h2 className="">clientes encontrados:</h2>
+                            <h2>clientes encontrados:</h2>
                         </div>
 
                         <div className="flex items-center space-x-2">

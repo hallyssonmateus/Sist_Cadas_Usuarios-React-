@@ -15,13 +15,16 @@ export default function Sidebar({onClose}: SideBarProps) {
     //Function to help verify if route is active
     const isLinkActive = (path: string) => location.pathname === path;
   return (
-    <aside className="h-screen w-[260px] bg-gray-100">
+    <aside className="h-screen bg-gray-100
+                      w-full fixed
+                      sm:w-[260px] sm:static
+                      md:w-[260px] md:static">
       {/* Superior Sidebar */}
       <nav className="h-full flex flex-col relative">
         <header className="w-full h-[128px] bg-zinc-700 flex items-center justify-center rounded-tr-lg">
           <img src={Logo} className='w-32' />
           <div className='h-[42px] w-[42px] bg-zinc-950 border absolute
-          top-[85px] left-[170px] 
+          top-[85px] left-[350px] 
           sm:top-[85px] sm:left-[240px]
           md:top-[85px] md:left-[240px]
           lg:top-[90px] lg:left-[240px]
@@ -52,7 +55,7 @@ export default function Sidebar({onClose}: SideBarProps) {
             </li>
             <li>
               <Link to="/clients-selected" className={`flex items-center gap-4 cursor-pointer
-              ${isLinkActive('/clients-selected') ? 'text-orange-500 font-semibold border-b-3' : 'text-black font-semibold hover:text-orange-400'}
+              ${isLinkActive('/clients-selected') ? 'text-orange-500 font-semibold border-r-3' : 'text-black font-semibold hover:text-orange-400'}
                 `}>
               <RiUserFollowFill />
               Clientes selecionados
