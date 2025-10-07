@@ -2,40 +2,46 @@ import React, { useEffect, useState } from "react";
 // Import interface Client from Types
 import type { Client } from "../types/Client";
 
+type FormData = Omit<Client, 'id'>;
 
 interface EditClientModalProps {
     clientData: Client;
     onClose: () => void;
+    onUpdate: (id: number, data: FormData) => void;
 }
 
-export const EditClientModal: React.FC<EditClientModalProps> = ({ clientData, onClose }) => {
+export const EditClientModal: React.FC<EditClientModalProps> = ({ clientData, onClose, onUpdate }) => {
     // Inicial State form data via Props
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         name: clientData.name,
-        salary: clientData.salary.toString(),
-        company: clientData.companyValuation.toString(),
+        salary: clientData.salary,
+        companyValuation: clientData.companyValuation
     });
 
     //Update state form when clientData prop changes
     useEffect(() => {
         setFormData({
             name: clientData.name,
-            salary: clientData.salary.toString(),
-            company: clientData.companyValuation.toString(),
+            salary: clientData.salary,
+            companyValuation: clientData.companyValuation
         });
     }, [clientData]);
 
     // Handle form input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    }
+        setFormData(prev => ({ ...prev, 
+            [name]: name === 'salary' || name === 'companyValuation' ? Number(value) : value
+        }));
+    };
     // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
+        // Call the function onUpdate, pass ID from client and new datas
+        onUpdate(clientData.id, formData);
         //Close modal on submit
         onClose();
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit}>
@@ -45,23 +51,23 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({ clientData, on
                     type="text"
                     name="name"
                     value={formData.name}
-                    onChange={handleChange}
+                    onChange={handleChange} required
                     placeholder="Digite o nome:"
                     className="w-full border border-gray-300 px-2 rounded-xs"
                 />
                 <input
-                    type="text"
+                    type="number"
                     name="salary"
                     value={formData.salary}
-                    onChange={handleChange}
+                    onChange={handleChange} required
                     placeholder="Digite o salário:"
                     className="w-full border border-gray-300 px-2 rounded-xs"
                 />
                 <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
+                    type="number"
+                    name="companyValuation"
+                    value={formData.companyValuation}
+                    onChange={handleChange} required
                     placeholder="Digite a empresa:"
                     className="w-full border border-gray-300 px-2 rounded-xs"
                 />

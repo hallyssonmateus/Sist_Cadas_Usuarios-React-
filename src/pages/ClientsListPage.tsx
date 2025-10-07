@@ -11,9 +11,12 @@ import { getClients } from "../api/clientService";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import { createClient } from "../api/clientService";
+import { UpdateClient } from "../api/clientService";
 
 // Types of Modal 
 type Modaltype = 'Create' | 'Edit' | 'Delete' | null;
+
+type UpdateData = Omit<Client, 'id'>;
 
 interface ClientsListProps {
     onAddClient: (client: Client) => void;
@@ -76,7 +79,7 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
         setSelectedClientId(id);
         setActiveModal('Edit');
     }
-    const selectedClientData = mockClients.find(c => c.id === selectedClientId);
+    //const selectedClientData = mockClients.find(c => c.id === selectedClientId);
     // Function to open Delete modal and set selected client ID
     const openDeleteModal = (id: number) => {
         setSelectedClientId(id);
@@ -89,11 +92,16 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
         if ((activeModal === 'Edit' || activeModal === 'Delete') && selectedClientId === null) {
             return null; // No client selected, don't render anything
         }
+
+        const selectedClientData = clients.find(c => c.id === selectedClientId);
+
+        if (!selectedClientData) return null;
+
         switch (activeModal) {
             case 'Create':
                 return <CreateClienteModal onClose={closeModal} onCreate={handleCreateClient}/>;
             case 'Edit':
-                return <EditClientModal clientData={selectedClientData!} onClose={closeModal} />;
+                return <EditClientModal clientData={selectedClientData} onClose={closeModal} onUpdate={handleUpdateClient}/>;
             case 'Delete':
                 return <DeleteClientModal clientData={selectedClientData!} onClose={closeModal} />;
             default:
@@ -188,6 +196,24 @@ export default function ClientsList({onAddClient, selectedClients}: ClientsListP
         } catch (error) {
 
             console.error("Falha ao criar cliente:", error);
+        } finally {
+            setIsLoading(false);
+            closeModal();
+        }
+    }
+
+    // Response API - Edit clients
+    const handleUpdateClient = async (id: number, clientData: UpdateData) => {
+        setIsLoading(true);
+        try {
+            await UpdateClient(id, clientData);
+
+            console.log(`Cliente ${id} editado com sucesso!"`);
+
+            //Recharge the updated data list
+            fetchClients(currentPage, limit);
+        } catch (error) {
+            console.error(`falha ao editar o cliente ${id}:`, error);
         } finally {
             setIsLoading(false);
             closeModal();

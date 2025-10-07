@@ -19,7 +19,6 @@ export const getClients = async (page: number, limit: number): Promise<ClientLis
 export async function createClient(clientData: NewClientData): Promise<Client> {
     try {
         const response = await axios.post<Client>(
-            // MUDANÇA AQUI: Corrigido de /clients para /users
             `${API_BASE_URL}/users`, 
             clientData
         );
@@ -31,5 +30,24 @@ export async function createClient(clientData: NewClientData): Promise<Client> {
             throw new Error(error.response.data.message || "Falha na criação do cliente.");
         }
         throw new Error("Erro de rede ou formato inesperado ao criar cliente.");
+    }
+}
+
+// Requisition Patch to edit client into API
+type UpdateClientData = Partial<Omit<Client, 'id'>>;
+
+export async function UpdateClient(id: number, clientData: UpdateClientData): Promise<Client> {
+    try {
+        const response = await axios.patch<Client>(
+            `${API_BASE_URL}/users/${id}`,
+            clientData
+        );
+        return response.data
+    } catch (error){
+        if(axios.isAxiosError(error) && error.response){
+            console.error(`Erro ao editar o client ${id}:`, error.response.data)
+            throw new Error(error.response.data.message || "Falha na edição do cliente");
+        }
+        throw new Error("Erro de rede ou formato inesperado ao editar cliente.")
     }
 }
